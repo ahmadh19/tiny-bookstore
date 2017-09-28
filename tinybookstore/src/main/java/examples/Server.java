@@ -5,7 +5,7 @@ import org.apache.xmlrpc.server.XmlRpcServer;
 import org.apache.xmlrpc.server.PropertyHandlerMapping;
 
 /**
- * Server 
+ * Server that offers one operation: a sumAndDifference operation
  * 
  * 
  * @author sprenkle
@@ -23,11 +23,11 @@ public class Server {
 	public static void main(String[] args) {
 		try {
 			System.out.println("Running Server ...");
-			PropertyHandlerMapping phm = new PropertyHandlerMapping();
+			PropertyHandlerMapping mapping = new PropertyHandlerMapping();
 			WebServer server = new WebServer(8888);
 			XmlRpcServer xmlRpcServer = server.getXmlRpcServer();
-			phm.addHandler("sample", Server.class);
-			xmlRpcServer.setHandlerMapping(phm);
+			mapping.addHandler("sample", Server.class);
+			xmlRpcServer.setHandlerMapping(mapping);
 			server.start();
 		} catch (Exception exception) {
 			System.err.println("Server: " + exception);
