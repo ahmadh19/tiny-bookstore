@@ -1,5 +1,5 @@
 """
-Example Python XMLRPC client talking to the Java XMLRPC server
+Example Python XML-RPC client talking to the Java XML-RPC server
 """
 
 import xmlrpc.client

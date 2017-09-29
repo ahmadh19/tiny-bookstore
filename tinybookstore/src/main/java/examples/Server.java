@@ -5,22 +5,12 @@ import org.apache.xmlrpc.server.XmlRpcServer;
 import org.apache.xmlrpc.server.PropertyHandlerMapping;
 
 /**
- * Server that offers one operation: a sumAndDifference operation
+ * XML-RPC Server that offers one operation: a sumAndDifference operation
  * 
- * 
- * @author sprenkle
- * 
+ * @author Sara Sprenkle
  */
 public class Server {
 	private static final int SERVER_PORT = 8888;
-
-	public Integer[] sumAndDifference(int x, int y) {
-		System.out.println("Server: Received request for sumAndDifference");
-		Integer[] array = new Integer[2];
-		array[0] = new Integer(x + y);
-		array[1] = new Integer(y - x);
-		return array;
-	}
 
 	public static void main(String[] args) {
 		try {
@@ -36,4 +26,23 @@ public class Server {
 			exception.printStackTrace();
 		}
 	}
+
+	/**
+	 * Calculates and returns the sum and difference of the given parameters
+	 * 
+	 * @param x
+	 *            the first operand
+	 * @param y
+	 *            the second operand
+	 * @return an array of the sum and difference, respectively, of parameters x and
+	 *         y
+	 */
+	public Integer[] sumAndDifference(int x, int y) {
+		System.out.println("Server: Received request for sumAndDifference");
+		Integer[] array = new Integer[2];
+		array[0] = new Integer(x + y);
+		array[1] = new Integer(y - x);
+		return array;
+	}
+
 }

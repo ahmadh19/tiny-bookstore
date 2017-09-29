@@ -9,8 +9,9 @@ import org.apache.xmlrpc.client.XmlRpcClient;
 import org.apache.xmlrpc.client.XmlRpcClientConfigImpl;
 
 /**
+ * XML-RPC client that talks to the XML-RPC server
  * 
- * @author sprenkle
+ * @author Sara Sprenkle
  * 
  */
 public class Client {
