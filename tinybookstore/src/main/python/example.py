@@ -1,5 +1,7 @@
 """
 Example Python XML-RPC client talking to the Java XML-RPC server
+
+@author: Sara Sprenkle
 """
 
 import xmlrpc.client
