@@ -12,6 +12,8 @@ import org.apache.xmlrpc.server.PropertyHandlerMapping;
  * 
  */
 public class Server {
+	private static final int SERVER_PORT = 8888;
+
 	public Integer[] sumAndDifference(int x, int y) {
 		System.out.println("Server: Received request for sumAndDifference");
 		Integer[] array = new Integer[2];
@@ -24,7 +26,7 @@ public class Server {
 		try {
 			System.out.println("Running Server ...");
 			PropertyHandlerMapping mapping = new PropertyHandlerMapping();
-			WebServer server = new WebServer(8888);
+			WebServer server = new WebServer(SERVER_PORT);
 			XmlRpcServer xmlRpcServer = server.getXmlRpcServer();
 			mapping.addHandler("sample", Server.class);
 			xmlRpcServer.setHandlerMapping(mapping);
