@@ -40,9 +40,22 @@ public class Server {
 	public Integer[] sumAndDifference(int x, int y) {
 		System.out.println("Server: Received request for sumAndDifference");
 		Integer[] array = new Integer[2];
-		array[0] = new Integer(x + y);
-		array[1] = new Integer(y - x);
+		array[0] = x + y;
+		array[1] = y - x;
 		return array;
+	}
+
+	/**
+	 * Example of a method that throws an exception
+	 * 
+	 * @param num
+	 * @return
+	 */
+	public boolean isValid(int num) {
+		if (num > 100 || num < 0) {
+			throw new IllegalArgumentException("not in range 0-100");
+		}
+		return true;
 	}
 
 }
