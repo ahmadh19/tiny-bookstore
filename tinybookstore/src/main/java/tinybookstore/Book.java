@@ -2,6 +2,12 @@ package tinybookstore;
 
 public class Book {
 
+	private int bookId;
+	private String title;
+	private int stockCount;
+	private double cost;
+	private String topic;
+	
 	/**
 	 * @return the bookId
 	 */
@@ -62,10 +68,5 @@ public class Book {
 	public void setTopic(String topic) {
 		this.topic = topic;
 	}
-	private int bookId;
-	private String title;
-	private int stockCount;
-	private double cost;
-	private String topic;
 	
 }
