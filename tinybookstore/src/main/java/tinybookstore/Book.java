@@ -8,6 +8,14 @@ public class Book {
 	private double cost;
 	private String topic;
 	
+	public Book(int bookId, String title, int stockCount, double cost, String topic) {
+		this.bookId = bookId;
+		this.title = title;
+		this.stockCount = stockCount;
+		this.cost = cost;
+		this.topic = topic;
+	}
+	
 	/**
 	 * @return the bookId
 	 */
