@@ -21,7 +21,7 @@ public class CatalogServer {
 	public static void main(String[] args) {
 		try {
 			fillCatalog();
-			System.out.println("Running Server ...");
+			System.out.println("Running Catalog Server ...");
 			PropertyHandlerMapping mapping = new PropertyHandlerMapping();
 			WebServer server = new WebServer(SERVER_PORT);
 			XmlRpcServer xmlRpcServer = server.getXmlRpcServer();
@@ -34,6 +34,9 @@ public class CatalogServer {
 		}
 	}
 	
+	/**
+	 * Fills the book catalog with all the available books
+	 */
 	private static void fillCatalog() {
 		catalog.put(53477, new Book(53477, "Achieving Less Bugs with More Hugs in CSCI 325", 
 				30, 25.50, "distributed systems"));
@@ -49,15 +52,16 @@ public class CatalogServer {
 	 * @param id the book's id
 	 * @return the book with the corresponding id
 	 */
-	public static Book lookupBook(int id) {
+	public static Book query(int id) {
 		return catalog.get(id);
 	}
 	
 	/**
+	 * Overloaded method
 	 * @param topic the book's topic
 	 * @return the books with the corresponding topic
 	 */
-	public static List<Book> searchBooks(String topic) {
+	public static List<Book> query(String topic) {
 		List<Book> results = new ArrayList<>();
 		for(Book b : catalog.values()) {
 			if(b.getTopic().equals(topic))
@@ -70,9 +74,19 @@ public class CatalogServer {
 	 * @param id the book's id
 	 * @param books the number of books to buy
 	 */
-	public static void buyBook(int id, int books) {
+	public static void updateStock(int id, int books) {
 		Book bk = catalog.get(id);
 		bk.setStockCount(bk.getStockCount() - books);
+		catalog.put(id, bk);
+	}
+	
+	/**
+	 * @param id the book's id
+	 * @param price the new price of the book
+	 */
+	public static void updateCost(int id, double price) {
+		Book bk = catalog.get(id);
+		bk.setCost(price);
 		catalog.put(id, bk);
 	}
 	
