@@ -2,7 +2,9 @@ package tinybookstore;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 
+import org.apache.xmlrpc.XmlRpcException;
 import org.apache.xmlrpc.client.XmlRpcClient;
 import org.apache.xmlrpc.client.XmlRpcClientConfigImpl;
 import org.apache.xmlrpc.server.PropertyHandlerMapping;
@@ -19,6 +21,7 @@ public class FrontEndServer {
 	private static final int DEFAULT_SERVER_PORT = 8001;
 	
 	private static final XmlRpcClient catalogServer = new XmlRpcClient();
+	private static final XmlRpcClient orderServer = new XmlRpcClient();
 
 	public static void main(String[] args) {
 		try {
@@ -40,9 +43,18 @@ public class FrontEndServer {
 				e1.printStackTrace();
 			}
 			catalogServer.setConfig(catalogServerConfig);
-			
-			
-			
+
+			// establish a connection to the order server
+			XmlRpcClientConfigImpl orderServerConfig = new XmlRpcClientConfigImpl();
+			String serverURL2 = "http://" + serverMachine + ":" + 8003;
+			try {
+				orderServerConfig.setServerURL(new URL(serverURL2));
+			} catch (MalformedURLException e1) {
+				e1.printStackTrace();
+			}
+			orderServer.setConfig(orderServerConfig);
+
+
 		} catch (Exception exception) {
 			System.err.println("Front-End Server: " + exception);
 			exception.printStackTrace();
@@ -52,29 +64,59 @@ public class FrontEndServer {
 	/**
 	 * 
 	 */
-	public Book[] search(String topic) {
+	public Object[][] search(String topic) {
 		System.out.println("Front-End Server: Received request for search");
-		Book[] array;
-		array = null; //TODO: Implement catalog server
-		return array;
+		try {
+			ArrayList<String> params = new ArrayList<String>();
+			params.add(topic);
+			System.out.println("Front-End Server: about to execute RPC");
+			Object[][] result = (Object[][]) catalogServer.execute(
+					"catalogServer.query", params.toArray());
+			return result;
+		} catch (XmlRpcException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 	/**
 	 * 
 	 */
-	public Book[] lookup(int itemNumber) {
+	public Object[] lookup(Integer itemNumber) {
 		System.out.println("Front-End Server: Received request for lookup");
-		Book[] array;
-		array = null; //TODO: Implement catalog server
-		return array;
+		try {
+			ArrayList<Integer> params = new ArrayList<Integer>();
+			params.add(itemNumber);
+			System.out.println("Front-End Server: about to execute RPC");
+			Object[] result = (Object[]) catalogServer.execute(
+					"catalogServer.query", params.toArray());
+			return result;
+		} catch (XmlRpcException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 	/**
 	 * 
 	 */
-	public void buy(int itemNumber) {
+	public Integer buy(int itemNumber) {
 		System.out.println("Front-End Server: Received request for buy");
-		//TODO: Implement catalog server
+		
+		ArrayList<Integer> params = new ArrayList<Integer>();
+		params.add(itemNumber);
+
+		try {
+			System.out.println("Front-End Server: about to execute RPC");
+			Object result = (Object) orderServer.execute(
+					"orderServer.buy", params.toArray());
+			return (Integer) result;
+			
+		} catch (XmlRpcException e) {
+			e.printStackTrace();
+		}
+		
+		return null;
 	}
 
 }

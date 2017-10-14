@@ -25,7 +25,7 @@ public class CatalogServer {
 			PropertyHandlerMapping mapping = new PropertyHandlerMapping();
 			WebServer server = new WebServer(SERVER_PORT);
 			XmlRpcServer xmlRpcServer = server.getXmlRpcServer();
-			mapping.addHandler("query", CatalogServer.class);
+			mapping.addHandler("catalogServer", CatalogServer.class);
 			xmlRpcServer.setHandlerMapping(mapping);
 			server.start();
 		} catch (Exception exception) {
@@ -48,46 +48,84 @@ public class CatalogServer {
 				13, 43.75, "college life"));
 	}
 	
+	private String[] representBookAsArray(Book book) {
+		String[] result = new String[5];
+		result[0] = Integer.toString(book.getBookId());
+		result[1] = book.getTitle();
+		result[2] = book.getTopic();
+		result[3] = Double.toString(book.getCost());
+		result[4] = Integer.toString(book.getStockCount());
+		return result;
+	}
+	
 	/**
 	 * @param id the book's id
 	 * @return the book with the corresponding id
 	 */
-	public static Book query(int id) {
-		return catalog.get(id);
+	public String[] query(int id) {
+		Book book = catalog.get(id);
+		String[] result = representBookAsArray(book);
+		return result;
 	}
 	
+	//TODO: WORK ON THIS METHOD. IT NEEDS TO BE FIXED
 	/**
 	 * Overloaded method
 	 * @param topic the book's topic
 	 * @return the books with the corresponding topic
-	 */
-	public static List<Book> query(String topic) {
-		List<Book> results = new ArrayList<>();
+	 *
+	public String[][] query(String topic) {
+		List<Book> books = new ArrayList<>();
 		for(Book b : catalog.values()) {
 			if(b.getTopic().equals(topic))
-				results.add(b);
+				books.add(b);
 		}
-		return results;
+		
+		String[][] result = new String[books.size()][5];
+		
+		for(int i = 0; i < books.size(); i++) {
+			result[i] = representBookAsArray(books.get(i));
+		}
+		
+		return result;
 	}
+	*/
 	
 	/**
 	 * @param id the book's id
 	 * @param books the number of books to buy
 	 */
-	public static void updateStock(int id, int books) {
+	public Integer updateStock(int id, int books) {
 		Book bk = catalog.get(id);
 		bk.setStockCount(bk.getStockCount() - books);
 		catalog.put(id, bk);
+		return new Integer(id);
 	}
 	
 	/**
 	 * @param id the book's id
 	 * @param price the new price of the book
 	 */
-	public static void updateCost(int id, double price) {
+	public Integer updateCost(int id, double price) {
 		Book bk = catalog.get(id);
 		bk.setCost(price);
 		catalog.put(id, bk);
+		return new Integer(id);
+	}
+	
+	/**
+	 * @param id the book's id
+	 * @param price the new price of the book
+	 */
+	public Integer inStock(int id) {
+		Book bk = catalog.get(id);
+		int stockCount = bk.getStockCount();
+		if(stockCount > 0) {
+			bk.setStockCount(stockCount - 1);
+			catalog.put(id, bk);
+			return 1; // cannot use boolean?
+		}
+		return 0;
 	}
 	
 }
