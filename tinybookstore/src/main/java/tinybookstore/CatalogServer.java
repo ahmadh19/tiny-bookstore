@@ -59,7 +59,6 @@ public class CatalogServer {
 		return result;
 	}
 	
-	//TODO: WORK ON THIS METHOD. IT NEEDS TO BE FIXED
 	/**
 	 * Overloaded method
 	 * @param topic the book's topic
