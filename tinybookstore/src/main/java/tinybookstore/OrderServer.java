@@ -3,6 +3,7 @@ package tinybookstore;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.xmlrpc.XmlRpcException;
 import org.apache.xmlrpc.client.XmlRpcClient;
@@ -18,6 +19,7 @@ import org.apache.xmlrpc.webserver.WebServer;
  */
 public class OrderServer {
 	
+	private static List<Integer> ordersList = new ArrayList<Integer>();
 	private static final int DEFAULT_SERVER_PORT = 8003;
 	private static final XmlRpcClient catalogServer = new XmlRpcClient();
 
@@ -63,6 +65,7 @@ public class OrderServer {
 					"catalogServer.inStock", params.toArray());
 			if((Integer) result == 1) {
 				System.out.println("Order Server: Buy request successful");
+				ordersList.add(itemNumber);
 				return new Integer(itemNumber);
 			} else {
 				throw new OutOfStockException();

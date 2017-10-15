@@ -15,7 +15,8 @@ import org.apache.xmlrpc.webserver.WebServer;
  */
 public class CatalogServer {
 	
-	private static final Map<Integer, Book> catalog = new TreeMap<>();
+	// @cooper, why is the catalog final? -Hammad
+	private static final Map<Integer, Book> catalog = new TreeMap<>(); 
 	private static final int SERVER_PORT = 8888;
 	
 	public static void main(String[] args) {
