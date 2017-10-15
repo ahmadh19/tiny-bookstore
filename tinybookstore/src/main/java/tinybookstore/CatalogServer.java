@@ -48,23 +48,13 @@ public class CatalogServer {
 				13, 43.75, "college life"));
 	}
 	
-	private String[] representBookAsArray(Book book) {
-		String[] result = new String[5];
-		result[0] = Integer.toString(book.getBookId());
-		result[1] = book.getTitle();
-		result[2] = book.getTopic();
-		result[3] = Double.toString(book.getCost());
-		result[4] = Integer.toString(book.getStockCount());
-		return result;
-	}
-	
 	/**
 	 * @param id the book's id
 	 * @return the book with the corresponding id
 	 */
 	public String[] query(int id) {
 		Book book = catalog.get(id);
-		String[] result = representBookAsArray(book);
+		String[] result = Book.unpackBookAsArray(book);
 		return result;
 	}
 	
@@ -73,23 +63,18 @@ public class CatalogServer {
 	 * Overloaded method
 	 * @param topic the book's topic
 	 * @return the books with the corresponding topic
-	 *
-	public String[][] query(String topic) {
+	 */
+	public String[] query(String topic) {
 		List<Book> books = new ArrayList<>();
 		for(Book b : catalog.values()) {
 			if(b.getTopic().equals(topic))
 				books.add(b);
 		}
 		
-		String[][] result = new String[books.size()][5];
+		String[] results = Book.unpackBooksAsArray(books);
 		
-		for(int i = 0; i < books.size(); i++) {
-			result[i] = representBookAsArray(books.get(i));
-		}
-		
-		return result;
+		return results;
 	}
-	*/
 	
 	/**
 	 * @param id the book's id

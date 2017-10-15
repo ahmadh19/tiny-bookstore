@@ -64,13 +64,13 @@ public class FrontEndServer {
 	/**
 	 * 
 	 */
-	public Object[][] search(String topic) {
+	public Object[] search(String topic) {
 		System.out.println("Front-End Server: Received request for search");
 		try {
 			ArrayList<String> params = new ArrayList<String>();
 			params.add(topic);
 			System.out.println("Front-End Server: about to execute RPC");
-			Object[][] result = (Object[][]) catalogServer.execute(
+			Object[] result = (Object[]) catalogServer.execute(
 					"catalogServer.query", params.toArray());
 			return result;
 		} catch (XmlRpcException e) {

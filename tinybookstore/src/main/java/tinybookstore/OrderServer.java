@@ -77,18 +77,4 @@ public class OrderServer {
 		return null;
 	}
 
-	/**
-	 * Checks if a book is in stock and if so, decreases the stock by 1 (when order is being
-	 * placed)
-	 * 
-	 * @param bookId
-	 * @return
-	 */
-	public boolean inStock(int bookId) {
-		/*if (bookId > 100 || bookId < 0) {
-			throw new IllegalArgumentException("not in range 0-100");
-		}*/
-		return true;
-	}
-
 }
