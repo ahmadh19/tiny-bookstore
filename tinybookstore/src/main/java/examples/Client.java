@@ -8,6 +8,8 @@ import org.apache.xmlrpc.XmlRpcException;
 import org.apache.xmlrpc.client.XmlRpcClient;
 import org.apache.xmlrpc.client.XmlRpcClientConfigImpl;
 
+import tinybookstore.Book;
+
 /**
  * XML-RPC client that talks to the XML-RPC server
  * 
@@ -20,7 +22,7 @@ public class Client {
 	public static void main(String[] args) {
 		System.out.println("Running client ...");
 		XmlRpcClientConfigImpl config = new XmlRpcClientConfigImpl();
-		int port = 8888;
+		int port = 8001;
 		String server = DEFAULT_SERVER_HOSTNAME;
 		if( args.length == 1) {
 			server = args[0];
@@ -34,18 +36,27 @@ public class Client {
 		XmlRpcClient client = new XmlRpcClient();
 		client.setConfig(config);
 
-		ArrayList<Integer> params = new ArrayList<Integer>();
-		params.add(10);
-		params.add(40);
+		//ArrayList<Integer> params = new ArrayList<Integer>();
+		//params.add(53477);
+		
+		ArrayList<String> params = new ArrayList<String>();
+		params.add("college life");
 
 		try {
 			System.out.println("Client: about to execute RPC");
 			Object[] result = (Object[]) client.execute(
-					"sample.sumAndDifference", params.toArray());
-			int sum = ((Integer) result[0]).intValue();
-			System.out.println("The sum is: " + sum);
-			int diff = ((Integer) result[1]).intValue();
-			System.out.println("The difference is: " + diff);
+					"frontEndServer.search", params.toArray());
+			//String r = ((String) result[0]);
+			for(int i = 0; i < result.length; i++) {
+				String r = ((String) result[i]);
+				System.out.println(r);
+			}
+			
+			//System.out.println(Book.packArrayAsBook(result));
+			List<Book> books = Book.packArrayAsBooks(result);
+			for(Book b : books) 
+				System.out.println(b);
+			
 		} catch (XmlRpcException e) {
 			e.printStackTrace();
 		}
