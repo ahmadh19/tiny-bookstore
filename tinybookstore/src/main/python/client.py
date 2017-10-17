@@ -36,16 +36,24 @@ while True:
         for i in books: print(i)
     elif command == "lookup":
         item_num = int(input("Item number: "))
-        result = proxy.frontEndServer.lookup(item_num)
-        books = get_books(result)
-        print(books[0])
+        try:
+            result = proxy.frontEndServer.lookup(item_num)
+            books = get_books(result)
+            print(books[0])
+        except Exception as exception:
+            print("got an exception:", exception)
     elif command == "buy":
         item_num = int(input("Item number of book to buy: "))
-        result = proxy.frontEndServer.buy(item_num)
-        display = proxy.frontEndServer.lookup(item_num)
-        books = get_books(display)
-        print(books[0])
+        try:
+            result = proxy.frontEndServer.buy(item_num)
+            display = proxy.frontEndServer.lookup(item_num)
+            books = get_books(display)
+            print(books[0])
+        except Exception as exception:
+            print("got an exception:", exception)
     elif command == "":
         break
+    else:
+        print("Invalid command. Please try again.")
     
         

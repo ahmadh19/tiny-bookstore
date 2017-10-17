@@ -21,13 +21,25 @@ public class OrderServer {
 	
 	private static List<Integer> ordersList = new ArrayList<Integer>();
 	private static final int DEFAULT_SERVER_PORT = 8003;
+	private static final int DEFAULT_CATALOG_SERVER_PORT = 8002;
+	private static final String DEFAULT_SERVER_HOSTNAME = "localhost";
 	private static final XmlRpcClient catalogServer = new XmlRpcClient();
 
 	public static void main(String[] args) {
+		int port = DEFAULT_SERVER_PORT;
+		String hostname = DEFAULT_SERVER_HOSTNAME;
+		int catalog_port = DEFAULT_CATALOG_SERVER_PORT;
+		String catalog_hostname = DEFAULT_SERVER_HOSTNAME;
+		if( args.length == 4) {
+			hostname = args[0];
+			port = Integer.parseInt(args[1]);
+			catalog_hostname = args[2];
+			catalog_port = Integer.parseInt(args[3]);
+		} 
 		try {
 			System.out.println("Running Order Server ...");
 			PropertyHandlerMapping mapping = new PropertyHandlerMapping();
-			WebServer server = new WebServer(DEFAULT_SERVER_PORT);
+			WebServer server = new WebServer(port);
 			XmlRpcServer xmlRpcServer = server.getXmlRpcServer();
 			mapping.addHandler("orderServer", OrderServer.class);
 			xmlRpcServer.setHandlerMapping(mapping);
@@ -35,8 +47,7 @@ public class OrderServer {
 
 			// establish a connection to the catalog server
 			XmlRpcClientConfigImpl catalogServerConfig = new XmlRpcClientConfigImpl();
-			String serverMachine = "localhost";
-			String serverURL = "http://" + serverMachine + ":" + 8888;
+			String serverURL = "http://" + catalog_hostname + ":" + Integer.toString(catalog_port);
 			try {
 				catalogServerConfig.setServerURL(new URL(serverURL));
 			} catch (MalformedURLException e1) {
@@ -51,9 +62,10 @@ public class OrderServer {
 	}
 
 	/**
+	 * @throws OutOfStockException 
 	 * 
 	 */
-	public Integer buy(int itemNumber) {
+	public Integer buy(int itemNumber) throws OutOfStockException {
 		System.out.println("Order Server: Received request for buy");
 		
 		ArrayList<Integer> params = new ArrayList<Integer>();
@@ -73,9 +85,7 @@ public class OrderServer {
 			
 		} catch (XmlRpcException e) {
 			e.printStackTrace();
-		} catch (OutOfStockException e) {
-			e.printStackTrace();
-		}
+		} 
 		
 		return null;
 	}

@@ -15,23 +15,51 @@ import org.apache.xmlrpc.webserver.WebServer;
  */
 public class CatalogServer {
 	
-	// @cooper, why is the catalog final? -Hammad
 	private static Map<Integer, Book> catalog = new TreeMap<>(); 
-	private static final int SERVER_PORT = 8888;
+	private static final int DEFAULT_SERVER_PORT = 8002;
+	private static final String DEFAULT_SERVER_HOSTNAME = "localhost";
 	
 	public static void main(String[] args) {
+		int port = DEFAULT_SERVER_PORT;
+		String hostname = DEFAULT_SERVER_HOSTNAME;
+		if( args.length == 2) {
+			hostname = args[0];
+			port = Integer.parseInt(args[1]);
+		} 
 		try {
 			fillCatalog();
 			System.out.println("Running Catalog Server ...");
 			PropertyHandlerMapping mapping = new PropertyHandlerMapping();
-			WebServer server = new WebServer(SERVER_PORT);
+			WebServer server = new WebServer(port);
 			XmlRpcServer xmlRpcServer = server.getXmlRpcServer();
 			mapping.addHandler("catalogServer", CatalogServer.class);
 			xmlRpcServer.setHandlerMapping(mapping);
 			server.start();
+			// automatic stock renewal based off of:
+			// https://stackoverflow.com/questions/14281058/run-a-method-at-a-time-interval
+			//TODO: THE STOCK RENEWAL IS NOT WORKING. FIX IT!
+			while(true) {
+			    long intervalInMs = 1000; // run every minute
+			    long nextRun = System.currentTimeMillis() + intervalInMs;
+			    synchronized(catalog) { //TODO: is it fine to do synchronized on catalog?
+			    	updateStockAutomatically();
+			    }
+			    if (nextRun > System.currentTimeMillis()) {
+			        Thread.sleep(nextRun - System.currentTimeMillis());
+			    }
+			}
 		} catch (Exception exception) {
 			System.err.println("Server: " + exception);
 			exception.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Increments the stock count of every book by 10.
+	 */
+	private static void updateStockAutomatically() {
+		for(Book b : catalog.values()) {
+			catalog.put(b.getBookId(), b);
 		}
 	}
 	
@@ -52,11 +80,16 @@ public class CatalogServer {
 	/**
 	 * @param id the book's id
 	 * @return the book with the corresponding id
+	 * @throws BookNotFoundException 
 	 */
-	public String[] query(int id) {
+	public String[] query(int id) throws BookNotFoundException {
 		Book book = catalog.get(id);
-		String[] result = Book.unpackBookAsArray(book);
-		return result;
+		if(book != null) {
+			String[] result = Book.unpackBookAsArray(book);
+			return result;
+		} else {
+			throw new BookNotFoundException();
+		}
 	}
 	
 	/**
@@ -79,38 +112,55 @@ public class CatalogServer {
 	/**
 	 * @param id the book's id
 	 * @param books the number of books to buy
+	 * @throws BookNotFoundException 
 	 */
-	public Integer updateStock(int id, int books) {
+	public Integer updateStock(int id, int books) throws BookNotFoundException {
 		Book bk = catalog.get(id);
-		bk.setStockCount(bk.getStockCount() - books);
-		catalog.put(id, bk);
-		return new Integer(id);
-	}
-	
-	/**
-	 * @param id the book's id
-	 * @param price the new price of the book
-	 */
-	public Integer updateCost(int id, double price) {
-		Book bk = catalog.get(id);
-		bk.setCost(price);
-		catalog.put(id, bk);
-		return new Integer(id);
-	}
-	
-	/**
-	 * @param id the book's id
-	 * @param price the new price of the book
-	 */
-	public Integer inStock(int id) {
-		Book bk = catalog.get(id);
-		int stockCount = bk.getStockCount();
-		if(stockCount > 0) {
-			bk.setStockCount(stockCount - 1);
+		if(bk != null) {
+			bk.setStockCount(bk.getStockCount() - books);
 			catalog.put(id, bk);
-			return 1; // cannot use boolean?
+			return new Integer(id);
+		} else {
+			throw new BookNotFoundException();
 		}
-		return 0;
+	}
+	
+	/**
+	 * @param id the book's id
+	 * @param price the new price of the book
+	 * @throws BookNotFoundException 
+	 */
+	public Integer updateCost(int id, double price) throws BookNotFoundException {
+		Book bk = catalog.get(id);
+		if(bk != null) {
+			bk.setCost(price);
+			catalog.put(id, bk);
+			return new Integer(id);
+		} else {
+			throw new BookNotFoundException();
+		}
+	}
+	
+	/**
+	 * @param id the book's id
+	 * @param price the new price of the book
+	 * @throws BookNotFoundException 
+	 */
+	public Integer inStock(int id) throws BookNotFoundException {
+		Book bk = catalog.get(id);
+		if(bk != null) {
+			synchronized(catalog) {
+				int stockCount = bk.getStockCount();
+				if(stockCount > 0) {
+					bk.setStockCount(stockCount - 1);
+					catalog.put(id, bk);
+					return 1; // cannot use boolean?
+				}
+				return 0;
+			}
+		} else {
+			throw new BookNotFoundException();
+		}
 	}
 	
 }

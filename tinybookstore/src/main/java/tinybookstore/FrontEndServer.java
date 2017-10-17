@@ -19,15 +19,31 @@ import org.apache.xmlrpc.webserver.WebServer;
 public class FrontEndServer {
 	
 	private static final int DEFAULT_SERVER_PORT = 8001;
-	
+	private static final int DEFAULT_CATALOG_SERVER_PORT = 8002;
+	private static final int DEFAULT_ORDER_SERVER_PORT = 8003;
+	private static final String DEFAULT_SERVER_HOSTNAME = "localhost";
 	private static final XmlRpcClient catalogServer = new XmlRpcClient();
 	private static final XmlRpcClient orderServer = new XmlRpcClient();
 
 	public static void main(String[] args) {
+		int port = DEFAULT_SERVER_PORT;
+		String hostname = DEFAULT_SERVER_HOSTNAME;
+		int catalog_port = DEFAULT_CATALOG_SERVER_PORT;
+		String catalog_hostname = DEFAULT_SERVER_HOSTNAME;
+		int order_port = DEFAULT_ORDER_SERVER_PORT;
+		String order_hostname = DEFAULT_SERVER_HOSTNAME;
+		if( args.length == 6) {
+			hostname = args[0];
+			port = Integer.parseInt(args[1]);
+			catalog_hostname = args[2];
+			catalog_port = Integer.parseInt(args[3]);
+			order_hostname = args[4];
+			order_port = Integer.parseInt(args[5]);
+		} 
 		try {
 			System.out.println("Running Front-End Server ...");
 			PropertyHandlerMapping mapping = new PropertyHandlerMapping();
-			WebServer server = new WebServer(DEFAULT_SERVER_PORT);
+			WebServer server = new WebServer(port);
 			XmlRpcServer xmlRpcServer = server.getXmlRpcServer();
 			mapping.addHandler("frontEndServer", FrontEndServer.class);
 			xmlRpcServer.setHandlerMapping(mapping);
@@ -35,10 +51,9 @@ public class FrontEndServer {
 			
 			// establish a connection to the catalog server
 			XmlRpcClientConfigImpl catalogServerConfig = new XmlRpcClientConfigImpl();
-			String serverMachine = "localhost";
-			String serverURL = "http://" + serverMachine + ":" + 8888;
+			String catalogServerURL = "http://" + catalog_hostname + ":" + Integer.toString(catalog_port);
 			try {
-				catalogServerConfig.setServerURL(new URL(serverURL));
+				catalogServerConfig.setServerURL(new URL(catalogServerURL));
 			} catch (MalformedURLException e1) {
 				e1.printStackTrace();
 			}
@@ -46,9 +61,9 @@ public class FrontEndServer {
 
 			// establish a connection to the order server
 			XmlRpcClientConfigImpl orderServerConfig = new XmlRpcClientConfigImpl();
-			String serverURL2 = "http://" + serverMachine + ":" + 8003;
+			String orderServerURL = "http://" + order_hostname + ":" + Integer.toString(order_port);
 			try {
-				orderServerConfig.setServerURL(new URL(serverURL2));
+				orderServerConfig.setServerURL(new URL(orderServerURL));
 			} catch (MalformedURLException e1) {
 				e1.printStackTrace();
 			}
