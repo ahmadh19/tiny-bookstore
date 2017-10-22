@@ -26,8 +26,7 @@ class Client:
             books.append(book)
         return books
     
-    def search(self):
-        topic = input("Topic: ")
+    def search(self, topic):
         result = self.proxy.frontEndServer.search(topic)
         books = self.get_books(result)
         if (len(books) == 0):
@@ -36,8 +35,7 @@ class Client:
             for i in books:
                 print(i)
                 
-    def lookup(self):
-        item_num = int(input("Item number: "))
+    def lookup(self, id):
         try:
             result = self.proxy.frontEndServer.lookup(item_num)
             books = self.get_books(result)
@@ -46,8 +44,7 @@ class Client:
             print("Book not found. Please try again.")
             #print("Got an exception:", exception)
             
-    def buy(self):
-        item_num = int(input("Item number of book to buy: "))
+    def buy(self, id):
         try:
             result = self.proxy.frontEndServer.buy(item_num)
             display = self.proxy.frontEndServer.lookup(item_num)
@@ -63,11 +60,14 @@ def main():
         print()
         command = input("What do you want to do? (Search, Lookup, Buy) ").lower()
         if command == "search":
-            client.search()
+            topic = input("Topic: ")
+            client.search(topic)
         elif command == "lookup":
-            client.lookup()
+            item_num = int(input("Item number: "))
+            client.lookup(item_num)
         elif command == "buy":
-            client.buy()
+            item_num = int(input("Item number of book to buy: "))
+            client.buy(item_num)
         elif command == "":
             break
         else:
