@@ -11,7 +11,7 @@ import xmlrpc.client, sys
 def get_books(array):
     books = []
     num_of_books = int(len(array) / 5)
-    for i in range(0, num_of_books):
+    for i in range(num_of_books):
         index = i*5
         book = Book(array[index:index+5])
         books.append(book)
