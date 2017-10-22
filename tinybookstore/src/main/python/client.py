@@ -33,7 +33,10 @@ while True:
         topic = input("Topic: ")
         result = proxy.frontEndServer.search(topic)
         books = get_books(result)
-        for i in books: print(i)
+        if(len(books) == 0):
+            print("No books found. Please try again.")
+        else:
+            for i in books: print(i)
     elif command == "lookup":
         item_num = int(input("Item number: "))
         try:
@@ -41,16 +44,16 @@ while True:
             books = get_books(result)
             print(books[0])
         except Exception as exception:
-            print("got an exception:", exception)
+            print("Got an exception:", exception)
     elif command == "buy":
         item_num = int(input("Item number of book to buy: "))
         try:
             result = proxy.frontEndServer.buy(item_num)
             display = proxy.frontEndServer.lookup(item_num)
             books = get_books(display)
-            print(books[0])
+            print("Bought book: ", books[0].title, ".")
         except Exception as exception:
-            print("got an exception:", exception)
+            print("Got an exception:", exception)
     elif command == "":
         break
     else:
