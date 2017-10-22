@@ -39,7 +39,7 @@ public class CatalogServer {
 			// https://stackoverflow.com/questions/14281058/run-a-method-at-a-time-interval
 			//TODO: THE STOCK RENEWAL IS NOT WORKING. FIX IT!
 			while(true) {
-			    long intervalInMs = 1000; // run every minute
+			    long intervalInMs = 60000; // run every minute
 			    long nextRun = System.currentTimeMillis() + intervalInMs;
 			    synchronized(catalog) { //TODO: is it fine to do synchronized on catalog?
 			    	updateStockAutomatically();
@@ -59,6 +59,8 @@ public class CatalogServer {
 	 */
 	private static void updateStockAutomatically() {
 		for(Book b : catalog.values()) {
+			int stockCount = b.getStockCount();
+			b.setStockCount(stockCount + 10);
 			catalog.put(b.getBookId(), b);
 		}
 	}
