@@ -42,7 +42,10 @@ while True:
         try:
             result = proxy.frontEndServer.lookup(item_num)
             books = get_books(result)
-            print(books[0])
+            if(len(books) == 0):
+                print("Book not found. Please try again.")
+            else:   
+                print(books[0])
         except Exception as exception:
             print("Got an exception:", exception)
     elif command == "buy":
