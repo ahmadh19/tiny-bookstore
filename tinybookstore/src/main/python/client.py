@@ -35,7 +35,7 @@ class Client:
             for i in books:
                 print(i)
                 
-    def lookup(self, id):
+    def lookup(self, item_num):
         try:
             result = self.proxy.frontEndServer.lookup(item_num)
             books = self.get_books(result)
@@ -44,7 +44,7 @@ class Client:
             print("Book not found. Please try again.")
             #print("Got an exception:", exception)
             
-    def buy(self, id):
+    def buy(self, item_num):
         try:
             result = self.proxy.frontEndServer.buy(item_num)
             display = self.proxy.frontEndServer.lookup(item_num)
