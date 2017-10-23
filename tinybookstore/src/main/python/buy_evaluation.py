@@ -2,14 +2,14 @@ from client import Client
 import time
 
 client = Client()
-buy_times = []
+times = []
 
 for i in range(500):
     start = time.time()
-    # do the same search keyword for each search for consistent data
-    client.buy(53477)
+    client.buy(53477) # buy book with ID 53477
     end = time.time() 
-    buy_times.append(end - start)
+    times.append(end - start)
+    # add the time to a graph?
     
-average = sum(buy_times)/len(buy_times)
-print("Average time to complete 500 buy requests: " + str(average) + " seconds.")
+avg = sum(times)/len(times)
+print("Average time to complete 500 buy requests: " + str(avg) + " seconds.")
