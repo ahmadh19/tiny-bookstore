@@ -37,7 +37,6 @@ public class CatalogServer {
 			server.start();
 			// automatic stock renewal based off of:
 			// https://stackoverflow.com/questions/14281058/run-a-method-at-a-time-interval
-			//TODO: THE STOCK RENEWAL IS NOT WORKING. FIX IT!
 			while(true) {
 			    long intervalInMs = 60000; // run every minute
 			    long nextRun = System.currentTimeMillis() + intervalInMs;
@@ -70,7 +69,7 @@ public class CatalogServer {
 	 */
 	private static void fillCatalog() {
 		catalog.put(53477, new Book(53477, "Achieving Less Bugs with More Hugs in CSCI 325", 
-				530, 25.50, "distributed systems"));
+				10000, 25.50, "distributed systems"));
 		catalog.put(53573, new Book(53573, "Distributed Systems for Dummies", 
 				26, 42.19, "distributed systems"));
 		catalog.put(12365, new Book(12365, "Surviving College", 
