@@ -14,37 +14,37 @@ class threadedClient (threading.Thread):
     def run(self):
         print ("Starting " + self.name)
         if self.operation == "buy":
-            buy(self, 53477)
+            self.buy(53477)
         elif self.operation == "search": 
-            search(self, "distributed systems")
+            self.search("distributed systems")
 
-def buy(clientThread, bookId):
-    times = []
-
-    for i in range(500):
-        start = time.time()
-        clientThread.client.buy(bookId) 
-        end = time.time() 
-        times.append(end - start)
-        
-    avg = sum(times)/len(times)
-    print(clientThread.name + ": Average time to complete 500 buy requests: " + str(avg) + " seconds.")
+    def buy(self, bookId):
+        times = []
     
-def search(clientThread, term):
-    times = []
-
-    for i in range(500):
-        start = time.time()
-        clientThread.client.search(term) 
-        end = time.time() 
-        times.append(end - start)
+        for i in range(500):
+            start = time.time()
+            self.client.buy(bookId) 
+            end = time.time() 
+            times.append(end - start)
+            
+        avg = sum(times)/len(times)
+        print(self.name + ": Average time to complete 500 buy requests: " + str(avg) + " seconds.")
         
-    avg = sum(times)/len(times)
-    print(clientThread.name + ": Average time to complete 500 search requests: " + str(avg) + " seconds.")
+    def search(self, term):
+        times = []
+    
+        for i in range(500):
+            start = time.time()
+            self.client.search(term) 
+            end = time.time() 
+            times.append(end - start)
+            
+        avg = sum(times)/len(times)
+        print(self.name + ": Average time to complete 500 search requests: " + str(avg) + " seconds.")
 
 threads = []
 
-command = input("How many clients do you want to test the system with?")
+command = input("How many clients do you want to test the system with? ")
 number_of_clients = int(command)
 
 # Create new threads
