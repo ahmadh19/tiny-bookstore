@@ -51,7 +51,8 @@ class Client:
             books = self.get_books(display)
             print("Bought book:", books[0].title)
         except Exception as exception:
-            print("Got an exception:", exception)
+            print("Book not found. Please try again.")
+            #print("Got an exception:", exception)
 
 def main():
     client = Client()
