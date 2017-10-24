@@ -1,0 +1,33 @@
+WELCOME TO THE TINY BOOKSTORE!
+
+What do you want to do? (Search, Lookup, Buy) search
+Topic: distributed systems
+Book ID: 53477, Title: Achieving Less Bugs with More Hugs in CSCI 325, Topic: distributed systems, Items in Stock: 2250, Price: $25.5
+Book ID: 53573, Title: Distributed Systems for Dummies, Topic: distributed systems, Items in Stock: 775, Price: $42.19
+
+What do you want to do? (Search, Lookup, Buy) search
+Topic: college life
+Book ID: 12365, Title: Surviving College, Topic: college life, Items in Stock: 802, Price: $17.25
+Book ID: 12498, Title: Cooking for the Impatient Undergraduate, Topic: college life, Items in Stock: 763, Price: $43.75
+
+What do you want to do? (Search, Lookup, Buy) search
+Topic: college
+No books found. Please try again.
+
+What do you want to do? (Search, Lookup, Buy) lookup
+Item number: 12365
+Book ID: 12365, Title: Surviving College, Topic: college life, Items in Stock: 802, Price: $17.25
+
+What do you want to do? (Search, Lookup, Buy) lookup
+Item number: 12366
+Book not found. Please try again.
+
+What do you want to do? (Search, Lookup, Buy) buy
+Item number of book to buy: 12365
+Bought book: Surviving College
+
+What do you want to do? (Search, Lookup, Buy) buy
+Item number of book to buy: 12366
+Book not found and/or book is out of stock.
+
+What do you want to do? (Search, Lookup, Buy) 
