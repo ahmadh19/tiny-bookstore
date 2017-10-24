@@ -88,9 +88,9 @@ for t in threads:
 print ("Exiting Main Thread")
 print()
 if request_type == "buy":
-    print(average_buy_times)
+    print("Average buy times:", average_buy_times)
 elif request_type == "search":
-    print(average_search_times)
+    print("Average search times:", average_search_times)
 
 """
 Based on several runs of the program, each with incrementing number of clients, the following

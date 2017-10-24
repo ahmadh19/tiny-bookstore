@@ -49,7 +49,7 @@ class Client:
             result = self.proxy.frontEndServer.buy(item_num)
             display = self.proxy.frontEndServer.lookup(item_num)
             books = self.get_books(display)
-            print("Bought book: ", books[0].title, ".")
+            print("Bought book:", books[0].title)
         except Exception as exception:
             print("Got an exception:", exception)
 
