@@ -31,6 +31,7 @@ average = sum(search_times)/len(search_times)
 print("Average search time for 500 searches: " + str(average) + " seconds.")
 
 #----------------------------------------------------------------------------------------
+# generate graph
 
 objects = ('Buy', 'Search')
 y_pos = np.arange(len(objects))
